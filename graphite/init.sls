@@ -18,6 +18,8 @@ install-deps:
 {%- elif grains['os_family'] == 'RedHat' %}
       - python-devel
       - sqlite
+      - bitmap
+      - bitmap-fonts
       - pycairo-devel
       - pkgconfig
       - python-gunicorn
