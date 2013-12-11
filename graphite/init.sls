@@ -19,7 +19,7 @@ install-deps:
       - python-devel
       - sqlite
       - bitmap
-      - bitmap-fonts
+      - bitmap-fonts-compat
       - pycairo-devel
       - pkgconfig
       - python-gunicorn
