@@ -1,7 +1,7 @@
 server {
   listen 80;
   {%- set default_hostname = salt['grains.get']('fqdn', 'monitor') %}
-  server_name {{ salt['grains.get']('graphite_hostname', default_hostname) }};
+  server_name {{ salt['grains.get']('graphite_host', default_hostname) }};
 
   location ^~ / {
     proxy_pass              http://localhost:8080;
