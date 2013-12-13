@@ -3,6 +3,15 @@
 # putting this in here for now as it is closely related to graphite
 # see if this will merit its own formula at some
 
+process-dirs:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+    - names:
+      - /var/log/diamond
+      - /var/run/diamond
+
 python-pip:
   pkg.installed
 
