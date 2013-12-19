@@ -1,4 +1,5 @@
 {%- if 'monitor' in salt['grains.get']('roles',[]) %}
+{%- from 'graphite/settings.sls' import graphite with context %}
 
 # putting this in here for now as it is closely related to graphite
 # see if this will merit its own formula at some
@@ -30,7 +31,9 @@ pip-install-diamond:
     - mode: 644
     - template: jinja
     - context:
-      graphite_host: {{ salt['grains.get']('graphite_host', 'monitor') }}
+      graphite_host: {{ graphite.host }}
+      graphite_port: {{ graphite.port }}
+      graphite_pickle_port: {{ graphite.pickle_port }}
     - require:
       - pip: pip-install-diamond
 

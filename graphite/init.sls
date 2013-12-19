@@ -1,5 +1,10 @@
 {%- if 'monitor_master' in salt['grains.get']('roles', []) %}
 
+{%- from 'graphite/settings.sls' import graphite with context %}
+
+/tmp/{{ graphite.host }}:
+  file.touch
+
 install-deps:
   pkg.installed:
     - names:
@@ -96,6 +101,10 @@ local-dirs:
 /opt/graphite/conf/carbon.conf:
   file.managed:
     - source: salt://graphite/files/carbon.conf
+    - template: jinja
+    - context:
+      graphite_port: {{ graphite.port }}
+      graphite_pickle_port: {{ graphite.pickle_port }}
 
 {%- if grains['os_family'] == 'Debian' %}
 {%- set supervisor_conf = '/etc/supervisor/supervisord.conf' %}
@@ -119,8 +128,10 @@ supervisord:
 
 /etc/nginx/conf.d/graphite.conf:
   file.managed:
-    - template: jinja
     - source: salt://graphite/files/graphite.conf.nginx
+    - template: jinja
+    - context:
+      graphite_host: {{ graphite.host }}
 
 nginx:
   service.running:
