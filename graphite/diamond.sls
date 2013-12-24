@@ -13,17 +13,16 @@ process-dirs:
       - /var/log/diamond
       - /var/run/diamond
 
-python-pip:
-  pkg.installed
+/tmp/diamond_reqs.txt:
+  file.managed:
+    - source: salt://graphite/files/diamond_reqs.txt
+    - template: jinja
 
 pip-install-diamond:
-  pip.installed:
-    - names:
-      - psutil
-      - ConfigObj
-      - diamond
-    - require:
-      - pkg: python-pip
+  cmd.wait:
+    - name: pip install --upgrade -r /tmp/diamond_reqs.txt
+    - watch:
+      - file: /tmp/diamond_reqs.txt
 
 /etc/diamond/diamond.conf:
   file.managed:
@@ -35,7 +34,7 @@ pip-install-diamond:
       graphite_port: {{ graphite.port }}
       graphite_pickle_port: {{ graphite.pickle_port }}
     - require:
-      - pip: pip-install-diamond
+      - cmd: pip-install-diamond
 
 /etc/init.d/diamond:
   file.managed:
