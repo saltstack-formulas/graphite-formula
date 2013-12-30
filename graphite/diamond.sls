@@ -20,6 +20,8 @@ process-dirs:
 
 pip-install-diamond:
   cmd.wait:
+    - env:
+      - VIRTUAL_ENV: 'fix-the-diamond-installer-on-CentOS'
     - name: pip install --upgrade -r /tmp/diamond_reqs.txt
     - watch:
       - file: /tmp/diamond_reqs.txt
@@ -27,6 +29,26 @@ pip-install-diamond:
 /etc/diamond/diamond.conf:
   file.managed:
     - source: salt://graphite/files/diamond/diamond.conf
+    - mode: 644
+    - template: jinja
+    - require:
+      - cmd: pip-install-diamond
+
+/etc/diamond/handlers/GraphiteHandler.conf:
+  file.managed:
+    - source: salt://graphite/files/diamond/handlers/GraphiteHandler.conf
+    - mode: 644
+    - template: jinja
+    - context:
+      graphite_host: {{ graphite.host }}
+      graphite_port: {{ graphite.port }}
+      graphite_pickle_port: {{ graphite.pickle_port }}
+    - require:
+      - cmd: pip-install-diamond
+
+/etc/diamond/handlers/GraphitePickleHandler.conf:
+  file.managed:
+    - source: salt://graphite/files/diamond/handlers/GraphitePickleHandler.conf
     - mode: 644
     - template: jinja
     - context:
@@ -46,6 +68,7 @@ rename-dist-collectors:
   cmd.run:
     - name: mv /etc/diamond/collectors /etc/diamond/collectors.dist
     - unless: test -L /etc/diamond/collectors
+    - onlyif: test -d /etc/diamond/collectors
 
 /etc/diamond/collectors.salt:
   file.recurse:
@@ -58,9 +81,10 @@ rename-dist-collectors:
 diamond:
   service.running:
     - enable: True
-    - reload: True
     - watch:
       - file: /etc/diamond/diamond.conf
       - file: /etc/diamond/collectors.salt
+      - file: /etc/diamond/handlers/GraphiteHandler.conf
+      - file: /etc/diamond/handlers/GraphitePickleHandler.conf
 
 {%- endif %}
