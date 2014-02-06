@@ -2,9 +2,6 @@
 
 {%- from 'graphite/settings.sls' import graphite with context %}
 
-/tmp/{{ graphite.host }}:
-  file.touch
-
 install-deps:
   pkg.installed:
     - names:
