@@ -16,9 +16,16 @@ Available states
     :local:
 
 ``graphite``
--------
+------------
 
 Installs all dependencies and the graphite packages themselves, sets up a minimal system including 
 supervisor to run carbon and django and nginx as the proxy.
+
+
+``graphite.mysqldb``
+--------------------
+
+Depends on the mysql-formula's mysql.client and mysql.server, makes the graphite server use mysql
+for the admin login.
 
 Please note that this is a very basic (and monolithic) formula, not necessarily intended for production use.

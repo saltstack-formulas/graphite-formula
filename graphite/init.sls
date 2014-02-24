@@ -86,6 +86,12 @@ local-dirs:
 /opt/graphite/webapp/graphite/local_settings.py:
   file.managed:
     - source: salt://graphite/files/local_settings.py
+    - template: jinja
+    - context:
+      dbtype: {{ graphite.dbtype }}
+      dbname: {{ graphite.dbname }}
+      dbuser: {{ graphite.dbuser }}
+      dbpassword: {{ graphite.dbpassword }}
 
 /opt/graphite/conf/storage-schemas.conf:
   file.managed:

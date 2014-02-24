@@ -140,23 +140,14 @@
 # specification as the old database specification style is removed in 1.4
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/opt/graphite/storage/graphite.db',
-        'USER': '',      # Not used with sqlite3.
-        'PASSWORD': '',  # Not used with sqlite3.
+        'ENGINE': 'django.db.backends.{{ dbtype }}',
+        'NAME': '{{ dbname }}',
+        'USER': '{{ dbuser }}',      # Not used with sqlite3.
+        'PASSWORD': '{{ dbpassword }}',  # Not used with sqlite3.
         'HOST': '',      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',      # Set to empty string for default. Not used with sqlite3.
     }
 }
-
-# Users still on Django 1.1 must use the old method instead:
-#DATABASE_ENGINE = 'django.db.backends.mysql'
-#DATABASE_NAME = 'graphite'      # Or path to the database file if using sqlite3
-#DATABASE_USER = 'graphite'
-#DATABASE_PASSWORD = 'graphite-is-awesome'
-#DATABASE_HOST = 'mysql.mycompany.com'
-#DATABASE_PORT = '3306'
-
 
 #########################
 # Cluster Configuration #
