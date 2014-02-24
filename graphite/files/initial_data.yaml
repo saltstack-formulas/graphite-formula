@@ -184,7 +184,7 @@
   pk: 45
 - fields:
     date_joined: 2014-01-01 01:01:01
-    email: steffen@sqrrl.com
+    email: {{ admin_email }}
     first_name: ''
     groups: []
     is_active: true
@@ -192,8 +192,8 @@
     is_superuser: true
     last_login: 2014-01-01 01:01:01
     last_name: ''
-    password: pbkdf2_sha256$10000$wZuRMciV2VKr$OAtsP+BksbR2DPQUEsY728cbIJmuYf4uXg4tLLGsvi4=
+    password: {{ admin_password }}
     user_permissions: []
-    username: sqrrl
+    username: {{ admin_user }}
   model: auth.user
   pk: 1
