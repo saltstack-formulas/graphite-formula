@@ -10,15 +10,6 @@ include:
 MySQL-python:
   pkg.installed
 
-{{ graphite.prefix }}/webapp/graphite/initial_data.yaml:
-  file.managed:
-    - source: salt://graphite/files/initial_data.yaml
-    - template: jinja
-    - context:
-      admin_email: {{ graphite.admin_email }}
-      admin_user: {{ graphite.admin_user }}
-      admin_password: {{ graphite.admin_password }}
-
 create-graphite-database:
   cmd.run:
     - name: mysqladmin create {{ graphite.dbname }}

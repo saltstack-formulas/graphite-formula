@@ -92,6 +92,18 @@ local-dirs:
       dbname: {{ graphite.dbname }}
       dbuser: {{ graphite.dbuser }}
       dbpassword: {{ graphite.dbpassword }}
+      dbhost: {{ graphite.dbhost }}
+      dbport: {{ graphite.dbport }}
+
+# django database fixtures
+{{ graphite.prefix }}/webapp/graphite/initial_data.yaml:
+  file.managed:
+    - source: salt://graphite/files/initial_data.yaml
+    - template: jinja
+    - context:
+      admin_email: {{ graphite.admin_email }}
+      admin_user: {{ graphite.admin_user }}
+      admin_password: {{ graphite.admin_password }}
 
 /opt/graphite/conf/storage-schemas.conf:
   file.managed:
@@ -108,6 +120,15 @@ local-dirs:
     - context:
       graphite_port: {{ graphite.port }}
       graphite_pickle_port: {{ graphite.pickle_port }}
+
+{%- if graphite.dbtype == 'sqlite3' %}
+
+initialize-graphite-db-sqlite3:
+  cmd.wait:
+    - cwd: {{ graphite.prefix }}/webapp/graphite
+    - name:  python manage.py syncdb --noinput
+
+{%- endif %}
 
 {%- if grains['os_family'] == 'Debian' %}
 {%- set supervisor_conf = '/etc/supervisor/supervisord.conf' %}
