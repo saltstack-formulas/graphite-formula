@@ -1,3 +1,6 @@
+include:
+  - graphite.supervisor
+
 {%- if 'monitor_master' in salt['grains.get']('roles', []) %}
 
 {%- from 'graphite/settings.sls' import graphite with context %}
@@ -5,7 +8,6 @@
 install-deps:
   pkg.installed:
     - names:
-      - supervisor
       - memcached
       - python-pip
       - nginx
@@ -122,33 +124,27 @@ local-dirs:
       graphite_pickle_port: {{ graphite.pickle_port }}
 
 {%- if graphite.dbtype == 'sqlite3' %}
-
 initialize-graphite-db-sqlite3:
-  cmd.wait:
+  cmd.run:
     - cwd: {{ graphite.prefix }}/webapp/graphite
     - name:  python manage.py syncdb --noinput
-
 {%- endif %}
 
-{%- if grains['os_family'] == 'Debian' %}
-{%- set supervisor_conf = '/etc/supervisor/supervisord.conf' %}
-{%- elif grains['os_family'] == 'RedHat' %}
-{%- set supervisor_conf = '/etc/supervisord.conf' %}
-{%- endif %}
-
-{{ supervisor_conf }}:
+/etc/supervisor/conf.d/graphite.conf:
   file.managed:
-    - source: salt://graphite/files/supervisord.conf
+    - source: salt://graphite/files/supervisord-graphite.conf
+    - mode: 644
 
+# cannot get any watch construct to work
+restart-supervisor-for-graphite:
+  cmd.wait:
 {%- if grains['os_family'] == 'Debian' %}
-supervisor:
+    - name: service supervisor restart
 {%- elif grains['os_family'] == 'RedHat' %}
-supervisord:
+    - name: service supervisord restart
 {%- endif %}
-  service.running:
-    - enable: True
     - watch:
-      - file: {{ supervisor_conf }}
+      - file: /etc/supervisor/conf.d/graphite.conf
 
 /etc/nginx/conf.d/graphite.conf:
   file.managed:
