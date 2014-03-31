@@ -7,7 +7,7 @@ Formula to set up and configure graphite servers on Debian and RedHat systems
 .. note::
 
     See the full `Salt Formulas installation and usage instructions
-    <http://docs.saltstack.com/topics/conventions/formulas.html>`_.
+    <http://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html>`_.
 
 Available states
 ================
@@ -21,6 +21,11 @@ Available states
 Installs all dependencies and the graphite packages themselves, sets up a minimal system including 
 supervisor to run carbon and django and nginx as the proxy.
 
+``graphite.supervisor``
+-----------------------
+
+Adds a basic supervisor configuration for the graphite daemons to work on top of.
+The graphite state already depends on this one internally - eventually there should be a supervisor-formula.
 
 ``graphite.mysqldb``
 --------------------
