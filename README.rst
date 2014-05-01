@@ -9,6 +9,20 @@ Formula to set up and configure graphite servers on Debian and RedHat systems
     See the full `Salt Formulas installation and usage instructions
     <http://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html>`_.
 
+
+Generating a new password
+==========================
+
+Uses the `Passlib library <http://pythonhosted.org/passlib/>`_ ::
+
+    pip install passlib
+    
+Then make::
+
+    python -c "from passlib.hash import pbkdf2_sha256; import getpass, pwd; print pbkdf2_sha256.encrypt(getpass.getpass())"
+    Password: [ENTER YOUR PASSWORD HERE]
+
+
 Available states
 ================
 
