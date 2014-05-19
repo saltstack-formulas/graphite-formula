@@ -122,6 +122,8 @@ local-dirs:
     - context:
       graphite_port: {{ graphite.port }}
       graphite_pickle_port: {{ graphite.pickle_port }}
+      max_creates_per_minute: {{ graphite.max_creates_per_minute }}
+      max_updates_per_second: {{ graphite.max_updates_per_second }}
 
 {%- if graphite.dbtype == 'sqlite3' %}
 initialize-graphite-db-sqlite3:

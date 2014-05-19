@@ -13,11 +13,15 @@
 {%- set port = gc.get('port', pc.get('port', '2003')) %}
 {%- set pickle_port = gc.get('pickle_port', pc.get('pickle_port', '2004')) %}
 
+# settings relevant to graphite server performance
+{%- set max_updates_per_second = gc.get('max_updates_per_second', pc.get('max_updates_per_second', '500')) %}
+{%- set max_creates_per_minute = gc.get('max_creates_per_minute', pc.get('max_creates_per_minute', '50')) %}
+
 # the only supported alternative here is mysql as dbtype
 {%- set dbtype         = gc.get('dbtype', pc.get('dbtype', 'sqlite3')) %}
 {%- set dbname         = gc.get('dbname', pc.get('dbname', '/opt/graphite/storage/graphite.db')) %}
 {%- set dbuser         = gc.get('dbuser', pc.get('dbuser', '')) %}
-{%- set dbpassword         = gc.get('dbpassword', pc.get('dbpassword', '')) %}
+{%- set dbpassword     = gc.get('dbpassword', pc.get('dbpassword', '')) %}
 {%- set dbhost         = gc.get('dbhost', pc.get('dbhost', '')) %}
 {%- set dbport         = gc.get('dbport', pc.get('dbport', '')) %}
 
@@ -33,6 +37,8 @@
                           'host'           : host,
                           'port'           : port,
                           'pickle_port'    : pickle_port,
+                          'max_updates_per_second': max_updates_per_second,
+                          'max_creates_per_minute': max_creates_per_minute,
                           'dbuser'         : dbuser,
                           'dbpassword'     : dbpassword,
                           'dbname'         : dbname,
