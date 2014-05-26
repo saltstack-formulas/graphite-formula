@@ -67,7 +67,7 @@ graphite:
     - group: graphite
     - shell: /bin/false
 
-/opt/graphite/storage:
+{{ graphite.storage_dir }}:
   file.directory:
     - user: graphite
     - group: graphite
@@ -124,6 +124,7 @@ local-dirs:
       graphite_pickle_port: {{ graphite.pickle_port }}
       max_creates_per_minute: {{ graphite.max_creates_per_minute }}
       max_updates_per_second: {{ graphite.max_updates_per_second }}
+      storage_dir: {{ graphite.storage_dir }}
 
 {%- if graphite.dbtype == 'sqlite3' %}
 initialize-graphite-db-sqlite3:

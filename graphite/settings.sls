@@ -24,6 +24,8 @@
 {%- set dbpassword     = gc.get('dbpassword', pc.get('dbpassword', '')) %}
 {%- set dbhost         = gc.get('dbhost', pc.get('dbhost', '')) %}
 {%- set dbport         = gc.get('dbport', pc.get('dbport', '')) %}
+# the writing to the whisper files will quickly kill access times to any disk - put it elsewhere if you can
+{%- set storage_dir    = gc.get('storage_dir', pc.get('storage_dir', '/opt/graphite/whisper')) %}
 
 # default username and password are admin
 {%- set default_password = 'pbkdf2_sha256$10000$wZuRMciV2VKr$OAtsP+BksbR2DPQUEsY728cbIJmuYf4uXg4tLLGsvi4=' %}
@@ -48,4 +50,5 @@
                           'admin_email'    : admin_email,
                           'admin_user'     : admin_user,
                           'admin_password' : admin_password,
+                          'storage_dir'    : storage_dir,
                         }) %}
