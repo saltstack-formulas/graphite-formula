@@ -71,6 +71,7 @@ graphite:
   file.directory:
     - user: graphite
     - group: graphite
+    - makedirs: True
     - recurse:
       - user
       - group
