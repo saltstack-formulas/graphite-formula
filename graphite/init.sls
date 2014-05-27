@@ -91,6 +91,7 @@ local-dirs:
     - source: salt://graphite/files/local_settings.py
     - template: jinja
     - context:
+      storage_dir: {{ graphite.storage_dir }}
       dbtype: {{ graphite.dbtype }}
       dbname: {{ graphite.dbname }}
       dbuser: {{ graphite.dbuser }}
