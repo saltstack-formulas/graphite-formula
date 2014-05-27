@@ -18,11 +18,11 @@
 {%- set max_creates_per_minute = gc.get('max_creates_per_minute', pc.get('max_creates_per_minute', '50')) %}
 
 # the writing to the whisper files will quickly kill access times to any disk - put it elsewhere if you can
-{%- set storage_dir    = gc.get('storage_dir', pc.get('storage_dir', '/opt/graphite/storage')) %}
+{%- set whisper_dir    = gc.get('whisper_dir', pc.get('whisper_dir', '/opt/graphite/storage/whisper')) %}
 
 # the only supported alternative here is mysql as dbtype
 {%- set dbtype         = gc.get('dbtype', pc.get('dbtype', 'sqlite3')) %}
-{%- set dbname         = gc.get('dbname', pc.get('dbname', storage_dir + '/graphite.db')) %}
+{%- set dbname         = gc.get('dbname', pc.get('dbname', '/opt/graphite/storage/graphite.db')) %}
 {%- set dbuser         = gc.get('dbuser', pc.get('dbuser', '')) %}
 {%- set dbpassword     = gc.get('dbpassword', pc.get('dbpassword', '')) %}
 {%- set dbhost         = gc.get('dbhost', pc.get('dbhost', '')) %}
@@ -51,5 +51,5 @@
                           'admin_email'    : admin_email,
                           'admin_user'     : admin_user,
                           'admin_password' : admin_password,
-                          'storage_dir'    : storage_dir,
+                          'whisper_dir'    : whisper_dir,
                         }) %}

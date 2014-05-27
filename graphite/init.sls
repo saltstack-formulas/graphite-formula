@@ -57,17 +57,27 @@ install-graphite-apps:
   file.append:
     - text: SECRET_KEY = '34960c411f3c13b362d33f8157f90d958f4ff1494d7568e58e0279df7450445ec496d8aaa098271e'
 
-/opt/graphite/storage/graphite.db:
-  file.managed:
-    - source: salt://graphite/files/graphite.db
-    - replace: False
-
 graphite:
   user.present:
     - group: graphite
     - shell: /bin/false
 
-{{ graphite.storage_dir }}:
+/opt/graphite/storage/graphite.db:
+  file.managed:
+    - source: salt://graphite/files/graphite.db
+    - replace: False
+    - user: graphite
+    - group: graphite
+
+/opt/graphite/storage:
+  file.directory:
+    - user: graphite
+    - group: graphite
+    - recurse:
+      - user
+      - group
+
+{{ graphite.whisper_dir }}:
   file.directory:
     - user: graphite
     - group: graphite
@@ -75,6 +85,15 @@ graphite:
     - recurse:
       - user
       - group
+
+{%- if graphite.whisper_dir != graphite.prefix + '/storage/whisper' %}
+
+{{ graphite.prefix + '/storage/whisper' }}:
+  file.symlink:
+    - target: {{ graphite.whisper_dir }}
+    - force: True
+
+{%- endif %}
 
 local-dirs:
   file.directory:
@@ -91,7 +110,6 @@ local-dirs:
     - source: salt://graphite/files/local_settings.py
     - template: jinja
     - context:
-      storage_dir: {{ graphite.storage_dir }}
       dbtype: {{ graphite.dbtype }}
       dbname: {{ graphite.dbname }}
       dbuser: {{ graphite.dbuser }}
@@ -126,7 +144,6 @@ local-dirs:
       graphite_pickle_port: {{ graphite.pickle_port }}
       max_creates_per_minute: {{ graphite.max_creates_per_minute }}
       max_updates_per_second: {{ graphite.max_updates_per_second }}
-      storage_dir: {{ graphite.storage_dir }}
 
 {%- if graphite.dbtype == 'sqlite3' %}
 initialize-graphite-db-sqlite3:
