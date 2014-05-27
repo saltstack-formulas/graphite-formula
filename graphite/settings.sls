@@ -17,15 +17,16 @@
 {%- set max_updates_per_second = gc.get('max_updates_per_second', pc.get('max_updates_per_second', '500')) %}
 {%- set max_creates_per_minute = gc.get('max_creates_per_minute', pc.get('max_creates_per_minute', '50')) %}
 
+# the writing to the whisper files will quickly kill access times to any disk - put it elsewhere if you can
+{%- set storage_dir    = gc.get('storage_dir', pc.get('storage_dir', '/opt/graphite/storage')) %}
+
 # the only supported alternative here is mysql as dbtype
 {%- set dbtype         = gc.get('dbtype', pc.get('dbtype', 'sqlite3')) %}
-{%- set dbname         = gc.get('dbname', pc.get('dbname', '/opt/graphite/storage/graphite.db')) %}
+{%- set dbname         = gc.get('dbname', pc.get('dbname', storage_dir + '/graphite.db')) %}
 {%- set dbuser         = gc.get('dbuser', pc.get('dbuser', '')) %}
 {%- set dbpassword     = gc.get('dbpassword', pc.get('dbpassword', '')) %}
 {%- set dbhost         = gc.get('dbhost', pc.get('dbhost', '')) %}
 {%- set dbport         = gc.get('dbport', pc.get('dbport', '')) %}
-# the writing to the whisper files will quickly kill access times to any disk - put it elsewhere if you can
-{%- set storage_dir    = gc.get('storage_dir', pc.get('storage_dir', '/opt/graphite/whisper')) %}
 
 # default username and password are admin
 {%- set default_password = 'pbkdf2_sha256$10000$wZuRMciV2VKr$OAtsP+BksbR2DPQUEsY728cbIJmuYf4uXg4tLLGsvi4=' %}
