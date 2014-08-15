@@ -9,6 +9,16 @@ Formula to set up and configure graphite servers on Debian and RedHat systems
     See the full `Salt Formulas installation and usage instructions
     <http://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html>`_.
 
+Starting Service
+================
+
+Setup database if not already done.
+
+    python /opt/graphite/webapp/graphite/manage.py syncdb
+
+Start graphite
+
+    /opt/graphite/bin/run-graphite-devel-server.py /opt/graphite &
 
 Generating a new password
 ==========================
