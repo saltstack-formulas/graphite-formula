@@ -11,6 +11,8 @@ install-deps:
       - memcached
       - python-pip
       - nginx
+      - gcc
+      - MySQL-python
 {%- if grains['os_family'] == 'Debian' %}
       - python-dev
       - sqlite3
@@ -35,8 +37,9 @@ install-deps:
 {%- set pkg_list = ['fixed-fonts', 'console-fonts', 'fangsongti-fonts', 'lucida-typewriter-fonts', 'miscfixed-fonts', 'fonts-compat'] %}
 {%- for fontpkg in pkg_list %}
 install-{{ fontpkg }}-on-amazon:
-  cmd.run:
-    - name: yum -y install http://mirror.centos.org/centos/6/os/x86_64/Packages/bitmap-{{ fontpkg }}-0.3-15.el6.noarch.rpm
+  pkg.installed:
+    - sources:
+      - bitmap-{{ fontpkg }}: http://mirror.centos.org/centos/6/os/x86_64/Packages/bitmap-{{ fontpkg }}-0.3-15.el6.noarch.rpm
 {%- endfor %}
 {%- endif %}
 
@@ -48,10 +51,12 @@ install-{{ fontpkg }}-on-amazon:
       graphite_version: '0.9.12'
 
 install-graphite-apps:
-  cmd.wait:
+  cmd.run:
     - name: pip install -r /tmp/graphite_reqs.txt
-    - watch:
+    - unless: test -d /opt/graphite/webapp
+    - require:
       - file: /tmp/graphite_reqs.txt
+      - pkg: install-deps
 
 /opt/graphite/webapp/graphite/app_settings.py:
   file.append:
