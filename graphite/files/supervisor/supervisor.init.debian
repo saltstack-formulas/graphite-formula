@@ -25,7 +25,7 @@ NAME=supervisord
 DAEMON=/usr/bin/$NAME   # Supervisord is installed in /usr/bin by default, but /usr/sbin would make more sense.
 SUPERVISORCTL=/usr/bin/supervisorctl
 PIDFILE=/var/run/$NAME.pid
-DAEMON_ARGS="--pidfile ${PIDFILE}"
+DAEMON_ARGS="--pidfile ${PIDFILE} -c /etc/supervisord.conf"
 SCRIPTNAME=/etc/init.d/$NAME
 
 # Exit if the package is not installed
