@@ -33,17 +33,17 @@ supervisor:
 
 /etc/init.d/supervisord:
   file.managed:
+{%- if grains['os_family'] == 'Debian' %}
+    - source: salt://graphite/files/supervisor/supervisor.init.debian
+{%- elif grains['os_family'] == 'RedHat' %}
     - source: salt://graphite/files/supervisor/supervisor.init
+{%- endif %}
     - mode: 755
     - template: jinja
 
 supervisor-service:
   service:
-{%- if grains['os_family'] == 'Debian' %}
-    - name: supervisor
-{%- elif grains['os_family'] == 'RedHat' %}
     - name: supervisord
-{%- endif %}
     - running
     - reload: True
     - enable: True
