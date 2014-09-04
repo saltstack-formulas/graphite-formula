@@ -165,11 +165,7 @@ initialize-graphite-db-sqlite3:
 # cannot get any watch construct to work
 restart-supervisor-for-graphite:
   cmd.wait:
-{%- if grains['os_family'] == 'Debian' %}
-    - name: service supervisor restart
-{%- elif grains['os_family'] == 'RedHat' %}
     - name: service supervisord restart
-{%- endif %}
     - watch:
       - file: /etc/supervisor/conf.d/graphite.conf
 
