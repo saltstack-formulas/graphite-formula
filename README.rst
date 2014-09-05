@@ -12,11 +12,11 @@ Formula to set up and configure graphite servers on Debian and RedHat systems
 Starting Service
 ================
 
-Setup database if not already done.
+Setup database if not already done ::
 
     python /opt/graphite/webapp/graphite/manage.py syncdb
 
-Start graphite
+Start graphite ::
 
     /opt/graphite/bin/run-graphite-devel-server.py /opt/graphite &
 
