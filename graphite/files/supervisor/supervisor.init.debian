@@ -22,7 +22,7 @@
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="Run a set of applications as daemons."
 NAME=supervisord
-DAEMON=/usr/bin/$NAME   # Supervisord is installed in /usr/bin by default, but /usr/sbin would make more sense.
+DAEMON=/usr/local/bin/$NAME   # Supervisord is installed in /usr/local/bin by pip, but /usr/sbin would make more sense.
 SUPERVISORCTL=/usr/bin/supervisorctl
 PIDFILE=/var/run/$NAME.pid
 DAEMON_ARGS="--pidfile ${PIDFILE} -c /etc/supervisord.conf"
