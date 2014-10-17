@@ -1,4 +1,4 @@
-{%- if 'monitor' in salt['grains.get']('roles',[]) %}
+{%- if 'mon' in salt['grains.get']('roles',[]) %}
 {%- from 'graphite/settings.sls' import graphite with context %}
 
 # putting this in here for now as it is closely related to graphite
