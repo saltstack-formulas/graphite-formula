@@ -45,6 +45,8 @@ Available states
 Installs all dependencies and the graphite packages themselves, sets up a minimal system including 
 supervisor to run carbon and django and nginx as the proxy.
 
+TODO some mention of the role:monitor_master grain
+
 ``graphite.supervisor``
 -----------------------
 

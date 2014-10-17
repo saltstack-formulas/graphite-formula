@@ -1,7 +1,7 @@
 include:
   - graphite.supervisor
 
-{%- if 'monitor_master' in salt['grains.get']('roles', []) %}
+{%- if 'mon' in salt['grains.get']('roles', []) %}
 
 {%- from 'graphite/settings.sls' import graphite with context %}
 
@@ -12,8 +12,8 @@ install-deps:
       - python-pip
       - nginx
       - gcc
-      - MySQL-python
 {%- if grains['os_family'] == 'Debian' %}
+      - python-mysqldb
       - python-dev
       - sqlite3
       - libcairo2
@@ -22,6 +22,7 @@ install-deps:
       - pkg-config
       - gunicorn
 {%- elif grains['os_family'] == 'RedHat' %}
+      - MySQL-python
       - python-devel
       - sqlite
       - bitmap
@@ -113,6 +114,7 @@ local-dirs:
 /opt/graphite/webapp/graphite/local_settings.py:
   file.managed:
     - source: salt://graphite/files/local_settings.py
+    - makedirs: True
     - template: jinja
     - context:
       dbtype: {{ graphite.dbtype }}
@@ -126,6 +128,7 @@ local-dirs:
 {{ graphite.prefix }}/webapp/graphite/initial_data.yaml:
   file.managed:
     - source: salt://graphite/files/initial_data.yaml
+    - makedirs: True
     - template: jinja
     - context:
       admin_email: {{ graphite.admin_email }}
@@ -135,14 +138,17 @@ local-dirs:
 /opt/graphite/conf/storage-schemas.conf:
   file.managed:
     - source: salt://graphite/files/storage-schemas.conf
+    - makedirs: True
 
 /opt/graphite/conf/storage-aggregation.conf:
   file.managed:
     - source: salt://graphite/files/storage-aggregation.conf
+    - makedirs: True
 
 /opt/graphite/conf/carbon.conf:
   file.managed:
     - source: salt://graphite/files/carbon.conf
+    - makedirs: True
     - template: jinja
     - context:
       graphite_port: {{ graphite.port }}
@@ -165,11 +171,7 @@ initialize-graphite-db-sqlite3:
 # cannot get any watch construct to work
 restart-supervisor-for-graphite:
   cmd.wait:
-{%- if grains['os_family'] == 'Debian' %}
-    - name: service supervisor restart
-{%- elif grains['os_family'] == 'RedHat' %}
     - name: service supervisord restart
-{%- endif %}
     - watch:
       - file: /etc/supervisor/conf.d/graphite.conf
 
