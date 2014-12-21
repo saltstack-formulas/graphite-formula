@@ -11,7 +11,10 @@ config-dir:
 supervisor:
   pip.installed
 
-/etc/supervisord.conf:
+# supervisorctl picks up /etc/init/supervisord.conf and attempts to use it as a supervisor configuration file
+# instead we want /etc/init/supervisor.conf -- which will strictly be used as an upstart file
+# via: http://cuppster.com/2011/05/18/using-supervisor-with-upstart/
+/etc/init/supervisor.conf:
   file.managed:
     - mode: 644
     - contents: |
@@ -49,4 +52,4 @@ supervisor-service:
     - enable: True
     - watch:
       - pip: supervisor
-      - file: /etc/supervisord.conf
+      - file: /etc/init/supervisor.conf
