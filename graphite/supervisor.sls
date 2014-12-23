@@ -11,10 +11,7 @@ config-dir:
 supervisor:
   pip.installed
 
-# supervisorctl picks up /etc/init/supervisord.conf and attempts to use it as a supervisor configuration file
-# instead we want /etc/init/supervisor.conf -- which will strictly be used as an upstart file
-# via: http://cuppster.com/2011/05/18/using-supervisor-with-upstart/
-/etc/init/supervisor.conf:
+{{ graphite.supervisor_conf }}:
   file.managed:
     - mode: 644
     - contents: |
@@ -33,8 +30,7 @@ supervisor:
         [supervisorctl]
         serverurl=unix:///var/run//supervisor.sock
 
-
-/etc/init.d/supervisord:
+{{ graphite.supervisor_init }}:
   file.managed:
     - source: salt://graphite/files/supervisor/supervisor.init
     - mode: 755
@@ -52,4 +48,4 @@ supervisor-service:
     - enable: True
     - watch:
       - pip: supervisor
-      - file: /etc/init/supervisor.conf
+      - file: {{ graphite.supervisor_conf }}
