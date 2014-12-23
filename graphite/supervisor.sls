@@ -11,7 +11,7 @@ config-dir:
 supervisor:
   pip.installed
 
-{{ graphite.supervisor_conf }}:
+graphite_supervisord_conf:
   file.managed:
     - mode: 644
     - contents: |
@@ -30,7 +30,7 @@ supervisor:
         [supervisorctl]
         serverurl=unix:///var/run//supervisor.sock
 
-{{ graphite.supervisor_init }}:
+graphite_supervisor_init:
   file.managed:
     - source: salt://graphite/files/supervisor/supervisor.init
     - mode: 755
