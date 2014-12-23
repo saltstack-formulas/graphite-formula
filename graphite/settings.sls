@@ -27,7 +27,7 @@
 # default supervisor config file
 # filename should be: "supervisord.conf" 
 # as specified in the defaults: http://supervisord.org/configuration.html
-{%- set supervisor_conf = gc.get('supervisor_conf', pc.get('supervisor_conf', '/etc/init/supervisord.conf')) %}
+{%- set supervisor_conf = gc.get('supervisor_conf', pc.get('supervisor_conf', '/etc/supervisord.conf')) %}
 
 # the only supported alternative here is mysql as dbtype
 {%- set dbtype         = gc.get('dbtype', pc.get('dbtype', 'sqlite3')) %}
