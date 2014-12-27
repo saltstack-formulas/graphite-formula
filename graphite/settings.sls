@@ -20,6 +20,16 @@
 # the writing to the whisper files will quickly kill access times to any disk - put it elsewhere if you can
 {%- set whisper_dir    = gc.get('whisper_dir', pc.get('whisper_dir', '/opt/graphite/storage/whisper')) %}
 
+# default supervisor init file
+# filename must NOT be "supervisord.conf"
+{%- set supervisor_init = gc.get('supervisor_init', pc.get('supervisor_init', '/etc/init.d/supervisor')) %}
+{%- set supervisor_init_name = supervisor_init.split('/')|last() %}
+
+# default supervisor config file
+# filename should be: "supervisord.conf" 
+# as specified in the defaults: http://supervisord.org/configuration.html
+{%- set supervisor_conf = gc.get('supervisor_conf', pc.get('supervisor_conf', '/etc/supervisord.conf')) %}
+
 # the only supported alternative here is mysql as dbtype
 {%- set dbtype         = gc.get('dbtype', pc.get('dbtype', 'sqlite3')) %}
 {%- set dbname         = gc.get('dbname', pc.get('dbname', '/opt/graphite/storage/graphite.db')) %}
@@ -52,4 +62,7 @@
                           'admin_user'     : admin_user,
                           'admin_password' : admin_password,
                           'whisper_dir'    : whisper_dir,
+                          'supervisor_init': supervisor_init,
+                          'supervisor_init_name': supervisor_init_name,
+                          'supervisor_conf': supervisor_conf
                         }) %}

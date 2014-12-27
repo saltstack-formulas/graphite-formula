@@ -1,3 +1,5 @@
+{%- from 'graphite/settings.sls' import graphite with context %}
+
 config-dir:
   file.directory:
     - names:
@@ -11,7 +13,7 @@ config-dir:
 supervisor:
   pip.installed
 
-/etc/supervisord.conf:
+{{ graphite.supervisor_conf }}:
   file.managed:
     - mode: 644
     - contents: |
@@ -30,8 +32,7 @@ supervisor:
         [supervisorctl]
         serverurl=unix:///var/run//supervisor.sock
 
-
-/etc/init.d/supervisord:
+{{ graphite.supervisor_init }}:
   file.managed:
     - source: salt://graphite/files/supervisor/supervisor.init
     - mode: 755
@@ -39,14 +40,10 @@ supervisor:
 
 supervisor-service:
   service:
-{%- if grains['os_family'] == 'Debian' %}
-    - name: supervisor
-{%- elif grains['os_family'] == 'RedHat' %}
-    - name: supervisord
-{%- endif %}
+    - name: {{ graphite.supervisor_init_name }}
     - running
     - reload: True
     - enable: True
     - watch:
       - pip: supervisor
-      - file: /etc/supervisord.conf
+      - file: {{ graphite.supervisor_conf }}
