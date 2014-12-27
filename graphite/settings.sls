@@ -23,6 +23,7 @@
 # default supervisor init file
 # filename must NOT be "supervisord.conf"
 {%- set supervisor_init = gc.get('supervisor_init', pc.get('supervisor_init', '/etc/init.d/supervisor')) %}
+{%- set supervisor_init_name = supervisor_init.split('/')|last() %}
 
 # default supervisor config file
 # filename should be: "supervisord.conf" 
@@ -62,5 +63,6 @@
                           'admin_password' : admin_password,
                           'whisper_dir'    : whisper_dir,
                           'supervisor_init': supervisor_init,
+                          'supervisor_init_name': supervisor_init_name,
                           'supervisor_conf': supervisor_conf
                         }) %}
