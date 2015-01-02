@@ -7,8 +7,13 @@ include:
   - mysql.client
   - mysql.server
 
+{%- if grains['os_family'] == 'Debian' %}
+python-mysqldb:
+  pkg.installed
+{%- elif grains['os_family'] == 'RedHat' %}
 MySQL-python:
   pkg.installed
+{%- endif %}
 
 create-graphite-database:
   cmd.run:
