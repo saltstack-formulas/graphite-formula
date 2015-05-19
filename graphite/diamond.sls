@@ -12,6 +12,7 @@ process-dirs:
     - names:
       - /var/log/diamond
       - /var/run/diamond
+      - /etc/diamond
 
 /tmp/diamond_reqs.txt:
   file.managed:
@@ -33,6 +34,7 @@ pip-install-diamond:
     - template: jinja
     - require:
       - cmd: pip-install-diamond
+      - file: /etc/diamond
 
 /etc/diamond/handlers/GraphiteHandler.conf:
   file.managed:

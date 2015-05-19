@@ -62,10 +62,18 @@ install-graphite-apps:
   file.append:
     - text: SECRET_KEY = '34960c411f3c13b362d33f8157f90d958f4ff1494d7568e58e0279df7450445ec496d8aaa098271e'
 
-graphite:
+graphite_group:
+  group.present:
+    - name: graphite
+
+graphite_user:
   user.present:
-    - group: graphite
+    - name: graphite
     - shell: /bin/false
+    - groups:
+      - graphite
+    - require:
+      - group: graphite_group
 
 /opt/graphite/storage/graphite.db:
   file.managed:
