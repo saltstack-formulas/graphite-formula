@@ -4,6 +4,10 @@ graphite
 
 Formula to set up and configure graphite servers on Debian and RedHat systems
 
+Set `monitor_master` role grain on the minion you want graphite installed on:
+
+    salt 'graphitemaster' grains.append roles monitor_master
+
 .. note::
 
     See the full `Salt Formulas installation and usage instructions
