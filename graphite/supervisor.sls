@@ -11,7 +11,9 @@ config-dir:
     - makedirs: True
 
 supervisor:
-  pip.installed
+  pip.installed:
+    - require:
+      - pkg: install-deps
 
 {{ graphite.supervisor_conf }}:
   file.managed:
