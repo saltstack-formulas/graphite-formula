@@ -23,7 +23,7 @@ start() {
     daemon supervisord
     RETVAL=$?
     echo
-    [ $RETVAL -eq 0 ] && touch /var/lock/subsys/supervisord
+    [ $RETVAL -eq 0 ] && mkdir -p /var/lock/subsys/ && touch /var/lock/subsys/supervisord
 }
 
 stop() {
