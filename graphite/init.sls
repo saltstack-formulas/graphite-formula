@@ -13,6 +13,7 @@ install-deps:
       - gcc
       - MySQL-python
 {%- if grains['os_family'] == 'Debian' %}
+      - daemon
       - python-dev
       - sqlite3
       - libcairo2
