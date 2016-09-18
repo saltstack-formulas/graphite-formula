@@ -10,10 +10,24 @@ config-dir:
     - mode: 755
     - makedirs: True
 
+{% if salt.grains.get('os_family') == 'Debian' %}
+supervisor:
+  pkg.installed:
+    - require:
+      - pkg: install-deps
+{% else %}
 supervisor:
   pip.installed:
     - require:
       - pkg: install-deps
+
+{{ graphite.supervisor_init }}:
+  file.managed:
+    - source: salt://graphite/files/supervisor/supervisor.init
+    - mode: 755
+    - template: jinja
+
+{% endif %}
 
 {{ graphite.supervisor_conf }}:
   file.managed:
@@ -34,12 +48,6 @@ supervisor:
         [supervisorctl]
         serverurl=unix:///var/run//supervisor.sock
 
-{{ graphite.supervisor_init }}:
-  file.managed:
-    - source: salt://graphite/files/supervisor/supervisor.init
-    - mode: 755
-    - template: jinja
-
 supervisor-service:
   service:
     - name: {{ graphite.supervisor_init_name }}
@@ -47,5 +55,10 @@ supervisor-service:
     - reload: True
     - enable: True
     - watch:
+      {%- if salt.grains.get('os_family') == 'Debian' %}
+      - pkg: supervisor
+      {%- else %}
       - pip: supervisor
+      {%- endif %}
       - file: {{ graphite.supervisor_conf }}
+
