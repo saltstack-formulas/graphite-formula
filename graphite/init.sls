@@ -11,7 +11,6 @@ install-deps:
       - python-pip
       - nginx
       - gcc
-      - MySQL-python
 {%- if grains['os_family'] == 'Debian' %}
       - python-dev
       - sqlite3
